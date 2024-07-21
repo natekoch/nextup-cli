@@ -1,10 +1,10 @@
 #include <iostream>
-#include <map>
+#include <list>
 #include <string>
 
-static std::map<int,std::string> todoList;
+static std::list<std::string> todoList;
 static std::string nextup();
-
+static void create(std::string task);
 
 int main(int argc, char* argv[])
 {
@@ -22,8 +22,21 @@ int main(int argc, char* argv[])
   }
   else
   {
-    // handle the commands    
-    std::cout << "This is where I should handle commands.\n";
+    // handle the commands
+    std::string command(argv[1]);
+    std::string task;
+    
+    if (argc == 3) task = argv[2];
+    else task = "";
+          
+    if (command == "create")
+    {
+      create(task);
+    }
+    else
+    {
+      std::cerr << "Unrecognized command.\n";
+    }
   }
   
 }
@@ -34,13 +47,26 @@ static std::string nextup()
   
   if (!todoList.empty())
   {
-    ret = todoList[0];
+    ret = todoList.front();
   }
   else
   {
-    ret = "You currently have no tasks. Use \"./nextup create <task>\" to create a new task.\n\nFor help type, \"./nextup help\"\n";
+    ret = "You currently have no tasks. Use \"./nextup create <task>\" to create a new task.\n\nFor more commands type, \"./nextup help\"\n";
   }
 
   return ret;
 }
 
+static void create(std::string task)
+{
+  if (task != "")
+  {  
+    todoList.push_back(task);
+    std::cout<< "\"" << task << "\"" << " added to your list.\n";
+  }
+  else
+  {
+    std::cerr << "Please try again and enter the title of a new task.\n";
+  }
+  // create logic to see if the task already exists. 
+}
